@@ -23,7 +23,7 @@ const upload = multer({
 
 let pdfText = "";
 
-// ✅ Automatically load React.pdf when the server starts
+// Automatically load React.pdf when the server starts
 async function loadPDF() {
   try {
     const dataBuffer = fs.readFileSync("knowledge/React.pdf");
@@ -37,6 +37,7 @@ async function loadPDF() {
   }
 }
 
+// Chat API
 app.post("/chat", async (req, res) => {
   try {
     const { question } = req.body;
@@ -52,7 +53,7 @@ app.post("/chat", async (req, res) => {
         {
           role: "user",
           content: `
-You are a PDF chatbot.
+You are Knowledge AI.
 
 Answer ONLY from the following PDF content.
 
@@ -63,7 +64,8 @@ Question:
 ${question}
 
 If the answer is not present in the PDF, reply:
-"I couldn't find this information in the uploaded PDF."
+
+"I couldn't find this information in the knowledge book."
 `,
         },
       ],
@@ -83,7 +85,7 @@ If the answer is not present in the PDF, reply:
   }
 });
 
-// Optional upload endpoint (you can remove this later)
+// Optional upload endpoint
 app.post("/upload", upload.single("pdf"), async (req, res) => {
   try {
     if (!req.file) {
@@ -112,7 +114,10 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
   }
 });
 
-app.listen(5000, async () => {
+// Start Server
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, async () => {
   await loadPDF();
-  console.log("🚀 Server running on port 5000");
+  console.log(`🚀 Server running on port ${PORT}`);
 });
