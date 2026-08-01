@@ -20,81 +20,86 @@ function App() {
 
     setMessage("");
 
-    const response = await fetch("http://localhost:5000/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        question: userMessage,
-      }),
-    });
+    try {
+      const response = await fetch(
+        "https://knowledge-ai-gf8i.onrender.com/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            question: userMessage,
+          }),
+        }
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    setMessages((prev) => [
-      ...prev.slice(0, -1),
-      {
-        user: userMessage,
-        bot: data.answer,
-      },
-    ]);
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        {
+          user: userMessage,
+          bot: data.answer,
+        },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        {
+          user: userMessage,
+          bot: "Unable to connect to the server.",
+        },
+      ]);
+    }
   };
 
   return (
-  <div className="container">
+    <div className="container">
+      <div className="header">
+        <h1>Knowledge AI</h1>
+        <p>AI-powered Knowledge Assistant</p>
+      </div>
 
-    <div className="header">
-      <h1> Knowledge AI</h1>
-      <p>AI-powered Knowledge Assistant</p>
-    </div>
-
-    <div className="chat-box">
-      {messages.length === 0 && (
-        <div className="welcome">
-          👋 Hello! Ask me anything from the loaded knowledge base.
-        </div>
-      )}
-
-      {messages.map((msg, index) => (
-        <div key={index}>
-
-          <div className="user-message">
-            <strong>You</strong>
-            <p>{msg.user}</p>
+      <div className="chat-box">
+        {messages.length === 0 && (
+          <div className="welcome">
+            👋 Hello! Ask me anything from the loaded knowledge base.
           </div>
+        )}
 
-          <div className="bot-message">
-            <strong>Knowledge AI</strong>
-            <p>{msg.bot}</p>
+        {messages.map((msg, index) => (
+          <div key={index}>
+            <div className="user-message">
+              <strong>You</strong>
+              <p>{msg.user}</p>
+            </div>
+
+            <div className="bot-message">
+              <strong>Knowledge AI</strong>
+              <p>{msg.bot}</p>
+            </div>
           </div>
+        ))}
+      </div>
 
-        </div>
-      ))}
+      <div className="input-area">
+        <input
+          type="text"
+          value={message}
+          placeholder="Ask your question..."
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
+        />
+
+        <button onClick={sendMessage}>➤</button>
+      </div>
     </div>
-
-    <div className="input-area">
-
-      <input
-        type="text"
-        value={message}
-        placeholder="Ask your question..."
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            sendMessage();
-          }
-        }}
-      />
-
-      <button onClick={sendMessage}>
-         ➤
-      </button>
-
-    </div>
-
-  </div>
-);
+  );
 }
 
 export default App;
