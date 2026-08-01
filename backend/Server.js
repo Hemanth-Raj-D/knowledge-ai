@@ -42,6 +42,23 @@ app.post("/chat", async (req, res) => {
   try {
     const { question } = req.body;
 
+    // Greeting Support
+    const q = question.trim().toLowerCase();
+
+    if (
+      q === "hi" ||
+      q === "hello" ||
+      q === "hey" ||
+      q === "good morning" ||
+      q === "good afternoon" ||
+      q === "good evening"
+    ) {
+      return res.json({
+        answer:
+          "Hello! I'm Knowledge AI. Ask me anything from the knowledge book.",
+      });
+    }
+
     if (!pdfText) {
       return res.json({
         answer: "Knowledge PDF not loaded.",
