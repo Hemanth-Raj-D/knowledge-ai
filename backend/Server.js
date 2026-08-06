@@ -47,9 +47,14 @@ app.post("/chat", async (req, res) => {
 
     if (
       q === "hi" ||
+      q === "hii" ||
+      q === "hiii" ||
       q === "hello" ||
+      q === "helloo" ||
       q === "hey" ||
+      q === "heyy" ||
       q === "good morning" ||
+      q === "goodmorning" ||
       q === "good afternoon" ||
       q === "good evening"
     ) {
